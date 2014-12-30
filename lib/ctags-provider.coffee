@@ -1,6 +1,6 @@
 
 module.exports =
-ProviderClass: (Provider, Suggestion, ctagsCache)  ->
+ProviderClass: (Provider, ctagsCache)  ->
   #maxItems = autocomplete-plus:SimpleSelectListView.maxItems
   options = { partialMatch: true, maxItems: 10 }
   basepath = atom.project.getPath()+"/"
@@ -32,12 +32,12 @@ ProviderClass: (Provider, Suggestion, ctagsCache)  ->
           v = matches[k++]
           continue if output[v.name]
           output[v.name] = v
-          suggestions.push new Suggestion(this, word: v.name, prefix: prefix, label: v.pattern)
+          suggestions.push @createSuggestion(this, word: v.name, prefix: prefix, label: v.pattern)
         if suggestions.length == 1 and suggestions[0].word == prefix
           return []
       else
         for i in matches
-          suggestions.push new Suggestion(this, word: i.name, prefix: prefix, label: i.pattern)
+          suggestions.push @createSuggestion(this, word: i.name, prefix: prefix, label: i.pattern)
 
       # No suggestions? Don't autocomplete!
       return unless suggestions.length
